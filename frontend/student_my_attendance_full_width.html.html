@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AttendTrack - My Attendance</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="js/api.js"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "background": "#f7f9fb",
+              "on-primary-fixed-variant": "#003ea8",
+              "error-container": "#ffdad6",
+              "on-background": "#191c1e",
+              "on-tertiary-fixed-variant": "#93000b",
+              "secondary-fixed-dim": "#b4c5ff",
+              "on-error-container": "#93000a",
+              "surface": "#f7f9fb",
+              "tertiary-fixed": "#ffdad6",
+              "on-tertiary-container": "#ffecea",
+              "on-secondary-container": "#394c84",
+              "on-secondary-fixed": "#00174b",
+              "error": "#dc2626",
+              "tertiary": "#ae0010",
+              "surface-container-lowest": "#ffffff",
+              "tertiary-container": "#d52022",
+              "outline": "#737686",
+              "primary-container": "#2563eb",
+              "primary-fixed": "#dbe1ff",
+              "surface-variant": "#e0e3e5",
+              "on-surface-variant": "#434655",
+              "on-primary-container": "#eeefff",
+              "on-secondary": "#ffffff",
+              "on-surface": "#191c1e",
+              "on-tertiary": "#ffffff",
+              "on-primary-fixed": "#00174b",
+              "surface-container-highest": "#e0e3e5",
+              "inverse-primary": "#b4c5ff",
+              "on-error": "#ffffff",
+              "on-tertiary-fixed": "#410002",
+              "outline-variant": "#c3c6d7",
+              "inverse-on-surface": "#eff1f3",
+              "secondary-container": "#acbfff",
+              "secondary": "#495c95",
+              "surface-container-low": "#f2f4f6",
+              "primary": "#004ac6",
+              "primary-fixed-dim": "#b4c5ff",
+              "on-primary": "#ffffff",
+              "surface-bright": "#f7f9fb",
+              "surface-container": "#eceef0",
+              "secondary-fixed": "#dbe1ff",
+              "tertiary-fixed-dim": "#ffb4ab",
+              "surface-tint": "#0053db",
+              "inverse-surface": "#2d3133",
+              "surface-dim": "#d8dadc",
+              "on-secondary-fixed-variant": "#31447b",
+              "surface-container-high": "#e6e8ea"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed flex min-h-screen">
+<!-- Main Content Canvas -->
+<div class="flex-grow flex flex-col w-full">
+<!-- Top Bar -->
+<header class="h-16 flex items-center justify-between px-6 md:px-10 border-b border-outline-variant/20 bg-surface/80 backdrop-blur-md sticky top-0 z-40">
+<div class="flex items-center gap-4">
+<div class="bg-primary p-1 rounded-lg">
+<span class="material-symbols-outlined text-white text-base leading-none" data-icon="analytics">analytics</span>
+</div>
+<h1 class="text-[#004ac6] font-black tracking-tight text-xl">AttendTrack</h1>
+</div>
+<div class="hidden md:block">
+<h2 class="text-sm font-semibold text-on-surface">My Attendance Overview</h2>
+</div>
+<div class="flex items-center gap-4">
+<button id="refresh-btn" class="p-2 rounded-lg hover:bg-primary/10 transition-all" title="Refresh attendance data">
+<span class="material-symbols-outlined text-primary text-base">refresh</span>
+</button>
+<div class="h-8 w-px bg-outline-variant/30 hidden sm:block"></div>
+<div class="flex items-center gap-3 pl-2">
+<div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed font-bold text-xs" id="user-initials">AJ</div>
+<span class="text-xs font-bold text-on-surface hidden md:block" id="user-name">Alex Johnson</span>
+<button id="logout-btn" class="text-xs font-bold text-error hover:underline ml-4">Logout</button>
+</div>
+</div>
+</header>
+<main class="flex-grow p-6 md:p-10">
+<div class="max-w-7xl mx-auto space-y-8">
+<!-- Warning Banner -->
+<div id="warning-banner" class="hidden bg-error/5 border border-error/20 p-4 md:p-5 rounded-2xl flex items-start md:items-center gap-4">
+<div class="bg-[#dc2626] p-2 rounded-lg flex-shrink-0">
+<span class="material-symbols-outlined text-white text-xl" data-icon="warning" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div class="flex-grow">
+<h3 class="text-[#dc2626] font-bold text-base">Attendance Alert: Low Engagement</h3>
+<p class="text-on-surface-variant text-sm mt-0.5">Your current average is <span class="font-bold" id="avg-percentage">72%</span>. A minimum of <span class="font-bold">75%</span> is required to remain eligible for examinations.</p>
+</div>
+</div>
+<!-- Summary & Academic Standing Section -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Main Header Info -->
+<div class="lg:col-span-2 flex flex-col justify-center">
+<span class="text-[11px] font-black uppercase tracking-[0.1em] text-primary mb-2">My Progress</span>
+<h1 class="text-3xl md:text-4xl font-black tracking-tight text-on-surface mb-4">Academic Standing</h1>
+<p class="text-on-surface-variant text-base leading-relaxed max-w-xl">
+                        A detailed analysis of your participation across all active modules. Ensure you to manage the attendance.
+                    </p>
+</div>
+<!-- Overall Stats Card -->
+<div class="bg-surface-container-highest/30 border border-outline-variant/30 p-6 rounded-2xl flex flex-col justify-between relative overflow-hidden">
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-4">
+<span class="text-[11px] font-bold text-outline uppercase tracking-wider">Total Average</span>
+<span class="material-symbols-outlined text-primary" data-icon="insights">insights</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="text-6xl font-black tracking-tighter" id="overall-percentage">72<span class="text-2xl font-bold">%</span></span>
+</div>
+<div class="mt-4 h-2 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div id="overall-progressbar" class="h-full bg-[#dc2626] rounded-full transition-all" style="width: 72%"></div>
+</div>
+</div>
+<div class="mt-4 flex items-center gap-2">
+<span class="flex h-2 w-2 rounded-full" id="status-indicator"></span>
+<span class="text-[10px] font-bold uppercase tracking-widest" id="status-text"></span>
+</div>
+</div>
+</div>
+<!-- Module Grid -->
+<div>
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-xl font-bold text-on-surface">Module Breakdown</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" id="modules-grid">
+<!-- Populated by JavaScript -->
+</div>
+</div>
+</main>
+<!-- Footer for basic info -->
+<footer class="p-6 text-center border-t border-outline-variant/10">
+<p class="text-[10px] text-outline uppercase tracking-widest font-bold">© 2024 AttendTrack Systems • Secured Environment</p>
+</footer>
+</div>
+<!-- Mobile Bottom Navigation -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full h-16 bg-surface/90 backdrop-blur-md border-t border-outline-variant/20 flex items-center justify-around px-6 z-50">
+<a id="nav-home" class="flex flex-col items-center gap-0.5 text-on-surface-variant cursor-pointer hover:text-primary transition-colors" onclick="window.location.href='attendtrack_login_desktop.html.html'">
+<span class="material-symbols-outlined text-2xl" data-icon="dashboard">dashboard</span>
+<span class="text-[9px] font-bold uppercase">Home</span>
+</a>
+<a id="nav-attendance" class="flex flex-col items-center gap-0.5 text-primary cursor-pointer hover:text-primary transition-colors" onclick="window.location.href='student_my_attendance_full_width.html.html'">
+<span class="material-symbols-outlined text-2xl" data-icon="person" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="text-[9px] font-bold uppercase">Attendance</span>
+</a>
+<a id="nav-settings" class="flex flex-col items-center gap-0.5 text-on-surface-variant cursor-pointer hover:text-primary transition-colors" onclick="alert('Settings page coming soon')">
+<span class="material-symbols-outlined text-2xl" data-icon="settings">settings</span>
+<span class="text-[9px] font-bold uppercase">Settings</span>
+</a>
+</nav>
+
+<script>
+document.addEventListener('DOMContentLoaded', async function() {
+  // Auth check
+  window.API.checkAuth(['student']);
+
+  // UI elements
+  const userInitials = document.getElementById('user-initials');
+  const userName = document.getElementById('user-name');
+  const logoutBtn = document.getElementById('logout-btn');
+  const warningBanner = document.getElementById('warning-banner');
+  const avgPercentage = document.getElementById('avg-percentage');
+  const overallPercentage = document.getElementById('overall-percentage');
+  const overallProgressbar = document.getElementById('overall-progressbar');
+  const statusIndicator = document.getElementById('status-indicator');
+  const statusText = document.getElementById('status-text');
+  const modulesGrid = document.getElementById('modules-grid');
+
+  // Get user info
+  const user = window.API.getUser();
+  const initials = user.name.split(' ').map(n => n[0]).join('').toUpperCase();
+  userInitials.textContent = initials;
+  userName.textContent = user.name;
+
+ // Load attendance
+  async function loadMyAttendance() {
+    try {
+      const response = await window.API.attendance.getMyAttendance();
+      
+      const attendanceData = response.attendanceData || [];
+      const overallAvg = response.overallPercentage || 0;
+      
+      if (attendanceData.length === 0) {
+        modulesGrid.innerHTML = '<div class="col-span-full text-center py-12"><p class="text-on-surface-variant">No attendance records found yet. Attendance will appear here once your teachers start marking it.</p></div>';
+        overallPercentage.innerHTML = '0<span class="text-2xl font-bold">%</span>';
+        overallProgressbar.style.width = '0%';
+        avgPercentage.textContent = '0%';
+        statusIndicator.className = 'flex h-2 w-2 rounded-full bg-outline';
+        statusText.className = 'text-[10px] font-bold text-outline uppercase tracking-widest';
+        statusText.textContent = 'No Data';
+        return;
+      }
+
+      // Update overall stats
+      overallPercentage.innerHTML = overallAvg + '<span class="text-2xl font-bold">%</span>';
+      overallProgressbar.style.width = overallAvg + '%';
+      avgPercentage.textContent = overallAvg + '%';
+
+      // Update warning banner and status colors
+      if (overallAvg < 75) {
+        warningBanner.classList.remove('hidden');
+        overallPercentage.className = 'text-6xl font-black tracking-tighter text-[#dc2626]';
+        overallProgressbar.className = 'h-full bg-[#dc2626] rounded-full transition-all';
+        statusIndicator.className = 'flex h-2 w-2 rounded-full bg-[#dc2626]';
+        statusText.className = 'text-[10px] font-bold text-[#dc2626] uppercase tracking-widest';
+        statusText.textContent = 'Urgent: Action Required';
+      } else {
+        warningBanner.classList.add('hidden');
+        overallPercentage.className = 'text-6xl font-black tracking-tighter text-primary';
+        overallProgressbar.className = 'h-full bg-primary rounded-full transition-all';
+        statusIndicator.className = 'flex h-2 w-2 rounded-full bg-primary';
+        statusText.className = 'text-[10px] font-bold text-primary uppercase tracking-widest';
+        statusText.textContent = 'On Track';
+      }
+
+      // Render subject-wise attendance cards (only real subjects from database)
+      modulesGrid.innerHTML = '';
+      attendanceData.forEach(item => {
+        const percentage = item.percentage;
+        const presentClasses = item.presentClasses;
+        const absentClasses = item.absentClasses !== undefined ? item.absentClasses : (item.totalClasses - item.presentClasses);
+        const totalClasses = item.totalClasses;
+        
+        const isLow = percentage < 75;
+        const statusColor = isLow ? '#dc2626' : '#004ac6';
+        const card = document.createElement('div');
+        card.className = 'bg-surface-container-lowest border border-outline-variant/20 p-5 rounded-2xl hover:shadow-lg hover:shadow-primary/5 transition-all';
+        card.innerHTML = `
+          <div class="flex justify-between items-start mb-6">
+            <div>
+              <span class="text-[10px] font-bold text-outline uppercase tracking-wider">${item.subject.code}</span>
+              <h4 class="text-lg font-bold text-on-surface mt-0.5">${item.subject.name}</h4>
+            </div>
+            ${isLow ? '<span class="px-2 py-1 bg-error/10 text-error text-[10px] font-black rounded uppercase">LOW ATTENDANCE</span>' : '<span class="px-2 py-1 bg-primary/10 text-primary text-[10px] font-black rounded uppercase">GOOD</span>'}
+          </div>
+          
+          <div class="flex items-end justify-between mb-4">
+            <div>
+              <span class="text-[10px] font-bold text-outline uppercase tracking-wider mb-1 block">Attendance</span>
+              <span class="text-3xl font-black tracking-tighter ${isLow ? 'text-error' : 'text-primary'}">${percentage}%</span>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] font-bold text-outline uppercase tracking-wider mb-1 block">Status</span>
+              <span class="text-sm font-bold ${isLow ? 'text-error' : 'text-primary'}">${isLow ? '⚠️ Low' : '✓ Good'}</span>
+            </div>
+          </div>
+          
+          <div class="h-2 w-full bg-surface-container rounded-full overflow-hidden mb-4">
+            <div class="h-full rounded-full transition-all" style="width: ${percentage}%; background-color: ${statusColor}"></div>
+          </div>
+          
+          <div class="bg-surface-container/50 p-3 rounded-lg mb-4">
+            <div class="grid grid-cols-3 gap-2 text-center">
+              <div>
+                <span class="text-[10px] font-bold text-primary uppercase tracking-wider block">Present</span>
+                <span class="text-lg font-bold text-on-surface">${presentClasses}</span>
+              </div>
+              <div>
+                <span class="text-[10px] font-bold text-error uppercase tracking-wider block">Absent</span>
+                <span class="text-lg font-bold text-on-surface">${absentClasses}</span>
+              </div>
+              <div>
+                <span class="text-[10px] font-bold text-outline uppercase tracking-wider block">Total</span>
+                <span class="text-lg font-bold text-on-surface">${totalClasses}</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex items-center border-t border-outline-variant/20 pt-3 gap-2">
+            <span class="material-symbols-outlined text-outline text-sm">person</span>
+            <span class="text-[10px] font-bold text-on-surface-variant">${item.subject.teacherName}</span>
+          </div>
+        `;
+        modulesGrid.appendChild(card);
+      });
+    } catch (error) {
+      console.error('Error loading attendance data:', error);
+      modulesGrid.innerHTML = '<div class="col-span-full text-center py-12"><p class="text-error">Error loading attendance data: ' + error.message + '</p></div>';
+    }
+  }
+
+  // Load initial data
+  loadMyAttendance();
+
+  // Refresh button
+  const refreshBtn = document.getElementById('refresh-btn');
+  refreshBtn.addEventListener('click', function() {
+    refreshBtn.style.transform = 'rotate(0deg)';
+    refreshBtn.style.transition = 'none';
+    setTimeout(() => {
+      refreshBtn.style.transition = 'transform 0.6s ease-in-out';
+      refreshBtn.style.transform = 'rotate(360deg)';
+    }, 0);
+    loadMyAttendance();
+  });
+
+  // Logout
+  logoutBtn.addEventListener('click', function() {
+    window.API.logout();
+  });
+});
+</script>
+</body>
