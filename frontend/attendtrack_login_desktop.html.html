@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AttendTrack - Institutional Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<script src="js/api.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "background": "#f7f9fb",
+              "on-primary-fixed-variant": "#003ea8",
+              "error-container": "#ffdad6",
+              "on-background": "#191c1e",
+              "on-tertiary-fixed-variant": "#93000b",
+              "secondary-fixed-dim": "#b4c5ff",
+              "on-error-container": "#93000a",
+              "surface": "#f7f9fb",
+              "tertiary-fixed": "#ffdad6",
+              "on-tertiary-container": "#ffecea",
+              "on-secondary-container": "#394c84",
+              "on-secondary-fixed": "#00174b",
+              "error": "#ba1a1a",
+              "tertiary": "#ae0010",
+              "surface-container-lowest": "#ffffff",
+              "tertiary-container": "#d52022",
+              "outline": "#737686",
+              "primary-container": "#2563eb",
+              "primary-fixed": "#dbe1ff",
+              "surface-variant": "#e0e3e5",
+              "on-surface-variant": "#434655",
+              "on-primary-container": "#eeefff",
+              "on-secondary": "#ffffff",
+              "on-surface": "#191c1e",
+              "on-tertiary": "#ffffff",
+              "on-primary-fixed": "#00174b",
+              "surface-container-highest": "#e0e3e5",
+              "inverse-primary": "#b4c5ff",
+              "on-error": "#ffffff",
+              "on-tertiary-fixed": "#410002",
+              "outline-variant": "#c3c6d7",
+              "inverse-on-surface": "#eff1f3",
+              "secondary-container": "#acbfff",
+              "secondary": "#495c95",
+              "surface-container-low": "#f2f4f6",
+              "primary": "#2563eb",
+              "primary-fixed-dim": "#b4c5ff",
+              "on-primary": "#ffffff",
+              "surface-bright": "#f7f9fb",
+              "surface-container": "#eceef0",
+              "secondary-fixed": "#dbe1ff",
+              "tertiary-fixed-dim": "#ffb4ab",
+              "surface-tint": "#2563eb",
+              "inverse-surface": "#2d3133",
+              "surface-dim": "#d8dadc",
+              "on-secondary-fixed-variant": "#31447b",
+              "surface-container-high": "#e6e8ea"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bg-academic {
+            background-image: linear-gradient(rgba(0, 74, 198, 0.85), rgba(0, 62, 168, 0.9)), url('https://lh3.googleusercontent.com/aida-public/AB6AXuAWTLUnW_gIaeaL160iuPU038QeUyTM7GYmu2-wjj_gvpnxXj3rRCPacufMknUh4HBMKbqd-gWwpm1weDHjRQSxfwQAl8aJd7r_3k0jgH9HSHyrYoE5l8fB4GGfZ61Z6Dkm0ApzszDwbhjuWwLBv18WPfQcnWO6Y3BqDVprYApx6Hw0usDOw2t2riOEtVSP08pKTKTMu2hgkzC5CPxLW6LcCWUZDLvRMgsdhsAfVL3YHw5hAtm0-VuMRNFDBall1fN-1hX8Z80WjOc');
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex items-stretch">
+<!-- Left Side: Visual / Brand Content (Desktop Only) -->
+<aside class="hidden lg:flex flex-col justify-between w-1/2 bg-academic p-16 text-white relative overflow-hidden">
+<div class="relative z-10">
+<div class="flex items-center gap-3 mb-12">
+<div class="w-10 h-10 rounded-lg bg-white/20 backdrop-blur-md flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-2xl" data-icon="school">school</span>
+</div>
+<span class="text-2xl font-black tracking-tighter">AttendTrack</span>
+</div>
+<div class="max-w-lg space-y-6">
+<h2 class="text-5xl font-bold leading-tight">Elevating Academic Excellence Through Precision.</h2>
+<p class="text-white/80 text-lg font-medium leading-relaxed">
+                    A comprehensive ecosystem designed for institutions to manage attendance, track performance, and streamline communication between faculty and students.
+                </p>
+</div>
+</div>
+<div class="relative z-10 flex items-center gap-8">
+<div class="flex -space-x-3">
+<img alt="User" class="w-10 h-10 rounded-full border-2 border-white/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuZiKYcJ5UJHLu6wo2uCBDnwfIASNufH3ufzulVwR_CsKKUxqZcxp6t_BjrZjFQfT5fgnV7zFBpjErGtd4VS32CfJtT1LM15Skj2ts8klu1hNk9Qoz930XW-wlnD52HbntvnxzaXsj6LdbockTK5wSrRu6KhfHgoPpCQtnZKBozgr3dHVek-YkF_lbVLNOHgANeOyZ448xR8NanKGBta_JjOi50lFWP4PyqfsMuoREQPbdRka2riXuDTjd1FY6o3Ee2TpbDx8sId4"/>
+<img alt="User" class="w-10 h-10 rounded-full border-2 border-white/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAt9l5BsFgupNYo6grd8fZmSXIKZ9FWJnJL46vfY3Bw9HL1K9lReDdE6Nfx2omw-BQvJJ2WE-bXD6C1URwdtitMkiBw_ZiP8oWwxS-YbhcXV-2j1H3YzE6-t91p_KxuF8zU_i3D-Yicz1u6-iJrZjqxQ7FCPP-63FFL9mjGPDtCSvFCKzGINLV6AJyVzO6i2DAkPYWTnkQthJ8EJlLdH47ma-9u4cq51hDIRy-jzd9jVYWNYAk2_Gqrxztkhq6NO3oSelNQ3jNUCVE"/>
+<img alt="User" class="w-10 h-10 rounded-full border-2 border-white/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtumx8hOvRMBMe9h0Z7MA8fqLvnHAjYzT2ynihR-j9lUeoUThtk0oSFtOC_McCDfR28NC1Nj0XjRVlOFYDtVRjNsjmo4dc22qh_GbFQUHZPozZDxvz7OPXsx1-tmUQeahZjP0DrmXMtBaI_8wFGtFvnzHVKk2eBgabBeYJKhUH9Ja-Sr7UACaCBzPSXqRI1EMwbwifZGbB9QTZlZFo8OsVwzOIGTMi7V5MR1TXKYUA5drsRA9hngxFfHBLhzm2MwsySipzLax5rDI"/>
+<div class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-[10px] font-bold border-2 border-white/20">+12k</div>
+</div>
+<p class="text-sm font-medium text-white/70">Trusted by over 500+ leading universities worldwide.</p>
+</div>
+<!-- Decorative Elements -->
+<div class="absolute -right-20 -bottom-20 w-96 h-96 bg-white/10 rounded-full blur-[100px]"></div>
+</aside>
+<!-- Right Side: Login Form -->
+<main class="flex-1 flex flex-col items-center justify-center p-8 md:p-16 lg:p-24 bg-surface">
+<div class="w-full max-w-[480px]">
+<!-- Mobile Branding (Hidden on Desktop) -->
+<div class="lg:hidden text-center mb-10">
+<div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-primary-container/10 mb-4">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="school">school</span>
+</div>
+<h1 class="text-3xl font-extrabold text-on-surface tracking-tighter mb-2">AttendTrack</h1>
+</div>
+<!-- Header Content -->
+<header class="mb-10">
+<h2 class="text-3xl font-bold text-on-surface mb-2">Sign in to your account</h2>
+<p class="text-on-surface-variant font-medium">Please enter your institutional credentials to continue.</p>
+</header>
+<form action="#" class="space-y-8" method="POST" id="login-form">
+<!-- Role Selection -->
+<div class="space-y-4">
+<span class="block text-[11px] font-bold uppercase tracking-[0.1em] text-outline">SELECT YOUR ROLE</span>
+<div class="grid grid-cols-3 gap-4">
+<label class="cursor-pointer group">
+<input checked="" class="hidden peer" name="role" type="radio" value="admin"/>
+<div class="flex flex-col items-center justify-center p-4 rounded-xl border-2 border-transparent bg-surface-container-low peer-checked:bg-white peer-checked:border-primary peer-checked:shadow-lg transition-all duration-300 group-hover:bg-surface-container-high">
+<span class="material-symbols-outlined text-2xl mb-2 text-outline group-hover:text-primary peer-checked:text-primary" data-icon="admin_panel_settings">admin_panel_settings</span>
+<span class="text-xs font-bold text-on-surface">Admin</span>
+</div>
+</label>
+<label class="cursor-pointer group">
+<input class="hidden peer" name="role" type="radio" value="teacher"/>
+<div class="flex flex-col items-center justify-center p-4 rounded-xl border-2 border-transparent bg-surface-container-low peer-checked:bg-white peer-checked:border-primary peer-checked:shadow-lg transition-all duration-300 group-hover:bg-surface-container-high">
+<span class="material-symbols-outlined text-2xl mb-2 text-outline group-hover:text-primary peer-checked:text-primary" data-icon="person">person</span>
+<span class="text-xs font-bold text-on-surface">Teacher</span>
+</div>
+</label>
+<label class="cursor-pointer group">
+<input class="hidden peer" name="role" type="radio" value="student"/>
+<div class="flex flex-col items-center justify-center p-4 rounded-xl border-2 border-transparent bg-surface-container-low peer-checked:bg-white peer-checked:border-primary peer-checked:shadow-lg transition-all duration-300 group-hover:bg-surface-container-high">
+<span class="material-symbols-outlined text-2xl mb-2 text-outline group-hover:text-primary peer-checked:text-primary" data-icon="auto_stories">auto_stories</span>
+<span class="text-xs font-bold text-on-surface">Student</span>
+</div>
+</label>
+</div>
+</div>
+<!-- Fields -->
+<div class="space-y-5">
+<div class="space-y-2">
+<label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-outline" for="email">INSTITUTIONAL EMAIL</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline text-xl" data-icon="mail">mail</span>
+<input class="w-full pl-12 pr-4 py-4 bg-surface-container-low border-2 border-transparent rounded-xl text-sm font-medium focus:ring-0 focus:border-primary focus:bg-white transition-all placeholder:text-outline-variant" id="email" name="email" placeholder="name@university.edu" type="email"/>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-center">
+<label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-outline" for="password">PASSWORD</label>
+<a class="text-xs font-bold text-primary hover:underline" href="#">FORGOT PASSWORD?</a>
+</div>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline text-xl" data-icon="lock">lock</span>
+<input class="w-full pl-12 pr-4 py-4 bg-surface-container-low border-2 border-transparent rounded-xl text-sm font-medium focus:ring-0 focus:border-primary focus:bg-white transition-all placeholder:text-outline-variant" id="password" name="password" placeholder="••••••••" type="password"/>
+</div>
+</div>
+</div>
+<!-- Submit -->
+<button class="w-full bg-[#2563EB] text-white font-bold py-4 rounded-xl shadow-xl shadow-primary/20 hover:bg-primary-container hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 text-sm tracking-widest uppercase" type="submit">
+                    Sign In to Dashboard
+                </button>
+</form>
+<!-- Footer Section -->
+<footer class="mt-12">
+<div class="p-4 bg-surface-container rounded-xl flex items-start gap-3 border border-outline-variant/30 mb-8">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="lightbulb">lightbulb</span>
+<div class="space-y-1">
+<p class="text-[11px] font-bold text-on-surface uppercase">Quick Access Tip</p>
+<p class="text-xs text-on-surface-variant font-medium leading-relaxed">
+                            Use your university-issued ID for authentication. Demo access: <code class="bg-primary/10 text-primary px-1 rounded">admin@track.edu</code> / <code class="bg-primary/10 text-primary px-1 rounded">demo1234</code>
+</p>
+</div>
+</div>
+<div class="flex flex-col md:flex-row items-center justify-between gap-4 text-outline text-[11px] font-bold tracking-wider">
+<p>© 2024 ATTENDTRACK</p>
+<div class="flex gap-6">
+<a class="hover:text-primary" href="#">PRIVACY POLICY</a>
+<a class="hover:text-primary" href="#">SUPPORT</a>
+</div>
+</div>
+</footer>
+</div>
+</main>
+
+<div id="error-message" class="hidden fixed top-4 right-4 bg-error text-white px-6 py-3 rounded-lg shadow-lg z-[100]"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Check if already logged in and redirect
+  if (window.API.isLoggedIn()) {
+    const user = window.API.getUser();
+    if (user.role === 'admin') {
+      window.location.href = 'admin_single_page_management.html.html';
+    } else if (user.role === 'teacher') {
+      window.location.href = 'teacher_mark_view_attendance_mobile.html.html';
+    } else if (user.role === 'student') {
+      window.location.href = 'student_my_attendance_full_width.html.html';
+    }
+  }
+
+  const form = document.getElementById('login-form');
+  const errorDiv = document.getElementById('error-message');
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const email = form.elements['email'].value;
+    const password = form.elements['password'].value;
+    const role = document.querySelector('input[name="role"]:checked').value;
+    const submitBtn = form.querySelector('button[type="submit"]');
+
+    try {
+      // Disable button and show loading state
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Signing in...';
+      errorDiv.classList.add('hidden');
+
+      // Call login API
+      const data = await window.API.auth.login(email, password, role);
+
+      // Redirect based on role
+      if (data.user.role === 'admin') {
+        window.location.href = 'admin_single_page_management.html.html';
+      } else if (data.user.role === 'teacher') {
+        window.location.href = 'teacher_mark_view_attendance_mobile.html.html';
+      } else if (data.user.role === 'student') {
+        window.location.href = 'student_my_attendance_full_width.html.html';
+      }
+    } catch (error) {
+      // Show error message
+      errorDiv.textContent = error.message;
+      errorDiv.classList.remove('hidden');
+      // Re-enable button
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Sign In to Dashboard';
+    }
+  });
+});
+</script>
+</body>
