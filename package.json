@@ -1,16 +1,13 @@
 {
-  "name": "stitch",
+  "name": "attendtrack-frontend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "AttendTrack Frontend - Attendance Management System",
+  "main": "index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "http-server -p 8000 -c-1",
+    "serve": "npx http-server -p 8000 -c-1"
   },
-  "keywords": [],
+  "keywords": ["attendance", "tracking"],
   "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "dependencies": {
-    "http-server": "^14.1.1"
-  }
+  "license": "ISC"
 }
